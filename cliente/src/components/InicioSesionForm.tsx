@@ -39,14 +39,14 @@ const InicioSesionForm = () => {
         className=" justify-center space-y-4">
         <SignupFormField
           name="email"
-          label="Email"
+          label="Correo Electrónico"
           placeholder="Email"
           inputType="email"
           formControl={form.control}
         />
         <SignupFormField
           name="password"
-          label="Password"
+          label="Contraseña"
           placeholder="Password"
           inputType="password"
           formControl={form.control}
