@@ -1,6 +1,7 @@
 'use client'
 import React from 'react'
 import {Button} from '@/components/ui/button'
+import {useRouter} from 'next/navigation'
 import {
   Form,
   FormControl,
@@ -24,6 +25,7 @@ const formSchema = z.object({
 })
 
 const InicioSesionForm = () => {
+  const router = useRouter()
   /* Este fragmento de código utiliza el hook `useForm` de la biblioteca `react-hook-form` para crear un formulario
 instancia para el formulario de inicio de sesión. */
   const form = useForm<z.infer<typeof formSchema>>({
@@ -48,6 +50,11 @@ instancia para el formulario de inicio de sesión. */
         },
       )
       console.log(await response.json())
+      if (response.ok) {
+        router.push('/modulos/dashboard')
+      } else {
+        alert('usuario no existe')
+      }
     } catch (error) {
       console.error(error)
     }
