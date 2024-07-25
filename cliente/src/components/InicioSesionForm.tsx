@@ -74,7 +74,7 @@ instancia para el formulario de inicio de sesión. */
         <div className="flex justify-center">
           <Button
             type="submit"
-            className='className="w-full w-60 mt-3 bg-[#5C776B] rounded-full hover:bg-[#475D53]"'>
+            className="w-full w-60 mt-3 bg-[#5C776B] rounded-full hover:bg-[#475D53]">
             Iniciar Sesión
           </Button>
         </div>
