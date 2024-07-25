@@ -16,31 +16,51 @@ import {useForm} from 'react-hook-form'
 import type {Control, FieldPath} from 'react-hook-form'
 import {z} from '@/components/zod-es.js'
 
+/* La declaración `const formSchema` crea un esquema utilizando la biblioteca Zod para la validación del formulario.
+En este caso, define un objeto de esquema con dos campos: "correo electrónico" y "contraseña". */
 const formSchema = z.object({
-  email: z.string().min(11).max(320),
+  correo: z.string().min(11).max(320),
   password: z.string().min(6).max(15),
 })
 
 const InicioSesionForm = () => {
+  /* Este fragmento de código utiliza el hook `useForm` de la biblioteca `react-hook-form` para crear un formulario
+instancia para el formulario de inicio de sesión. */
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
+      correo: '',
       password: '',
     },
   })
-  const obtenerDatosLogin = (values: z.infer<typeof formSchema>) => {
-    console.log(values)
+  /* función para obtener los datos del formulario de inicio de sesion y mandarlos al servidor*/
+  const obtenerDatosInicioSesion = async (
+    values: z.infer<typeof formSchema>,
+  ) => {
+    const {correo, password} = values //values.correo y values.password
+    try {
+      const response = await fetch(
+        'https://2bkjdpz5-3000.use2.devtunnels.ms/auth/login',
+        {
+          method: 'POST',
+          headers: {'Content-type': 'application/json'},
+          body: JSON.stringify({correo, password}),
+        },
+      )
+      console.log(await response.json())
+    } catch (error) {
+      console.error(error)
+    }
   }
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(obtenerDatosLogin)}
+        onSubmit={form.handleSubmit(obtenerDatosInicioSesion)}
         className=" justify-center space-y-4">
         <SignupFormField
-          name="email"
+          name="correo"
           label="Correo Electrónico"
-          placeholder="Email"
+          placeholder="correo"
           inputType="email"
           formControl={form.control}
         />
@@ -63,6 +83,8 @@ const InicioSesionForm = () => {
   )
 }
 
+/* La `interfaz SignupFormFieldProps` define los props que el componente `SignupFormField`
+espera recibir. */
 interface SignupFormFieldProps {
   name: FieldPath<z.infer<typeof formSchema>>
   label: string
