@@ -40,7 +40,7 @@ instancia para el formulario de inicio de sesión. */
     const {correo, password} = values //values.correo y values.password
     try {
       const response = await fetch(
-        'https://2bkjdpz5-3000.use2.devtunnels.ms/auth/login',
+        'https://gestor-de-inventario.onrender.com/api/v1/auth/login',
         {
           method: 'POST',
           headers: {'Content-type': 'application/json'},
