@@ -1,7 +1,8 @@
 'use client'
-import React from 'react'
+import React, {useState} from 'react'
 import {Button} from '@/components/ui/button'
 import {useRouter} from 'next/navigation'
+import {AlertDestructive} from '@/components/Alerta'
 import {
   Form,
   FormControl,
@@ -20,11 +21,12 @@ import {z} from '@/components/zod-es.js'
 /* La declaración `const formSchema` crea un esquema utilizando la biblioteca Zod para la validación del formulario.
 En este caso, define un objeto de esquema con dos campos: "correo electrónico" y "contraseña". */
 const formSchema = z.object({
-  correo: z.string().min(11).max(320),
-  password: z.string().min(6).max(15),
+  correo: z.string().min(11).max(40),
+  password: z.string().min(6).max(50),
 })
 
 const InicioSesionForm = () => {
+  const [Error, setError] = useState(false)
   const router = useRouter()
   /* Este fragmento de código utiliza el hook `useForm` de la biblioteca `react-hook-form` para crear un formulario
 instancia para el formulario de inicio de sesión. */
@@ -49,44 +51,47 @@ instancia para el formulario de inicio de sesión. */
           body: JSON.stringify({correo, password}),
         },
       )
-      console.log(await response.json())
-      if (response.ok) {
-        router.push('/modulos/dashboard')
-      } else {
-        alert('usuario no existe')
-      }
+      response.ok ? router.push('/modulos/dashboard') : setError(true)
     } catch (error) {
       console.error(error)
     }
   }
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(obtenerDatosInicioSesion)}
-        className=" justify-center space-y-4">
-        <SignupFormField
-          name="correo"
-          label="Correo Electrónico"
-          placeholder="correo"
-          inputType="email"
-          formControl={form.control}
-        />
-        <SignupFormField
-          name="password"
-          label="Contraseña"
-          placeholder="Password"
-          inputType="password"
-          formControl={form.control}
-        />
-        <div className="flex justify-center">
-          <Button
-            type="submit"
-            className="w-full w-60 mt-3 bg-[#5C776B] rounded-full hover:bg-[#475D53]">
-            Iniciar Sesión
-          </Button>
-        </div>
-      </form>
-    </Form>
+    <>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(obtenerDatosInicioSesion)}
+          className=" justify-center space-y-4">
+          <SignupFormField
+            name="correo"
+            label="Correo Electrónico"
+            placeholder="correo"
+            inputType="email"
+            formControl={form.control}
+          />
+          <SignupFormField
+            name="password"
+            label="Contraseña"
+            placeholder="Password"
+            inputType="password"
+            formControl={form.control}
+          />
+          <div className="flex justify-center">
+            <Button
+              type="submit"
+              className="w-60 mt-3 bg-[#5C776B] rounded-full hover:bg-[#475D53]">
+              Iniciar Sesión
+            </Button>
+          </div>
+        </form>
+      </Form>
+      <p className="mt-4 text-xs text-slate-200">
+        2024 - SISTEMA DE INVENTARIO
+      </p>
+      <div className={Error ? 'visible' : 'invisible'}>
+        <AlertDestructive mensaje="Usuario no encontrado" />
+      </div>
+    </>
   )
 }
 
@@ -109,25 +114,27 @@ const SignupFormField: React.FC<SignupFormFieldProps> = ({
   formControl,
 }) => {
   return (
-    <FormField
-      control={formControl}
-      name={name}
-      render={({field}) => (
-        <FormItem>
-          <FormLabel className="text-base">{label}</FormLabel>
-          <FormControl>
-            <Input
-              className="mt-2 mb-5 w-80 bg-transparent rounded-full"
-              placeholder={placeholder}
-              type={inputType || 'text'}
-              {...field}
-            />
-          </FormControl>
-          {description && <FormDescription>{description}</FormDescription>}
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+    <>
+      <FormField
+        control={formControl}
+        name={name}
+        render={({field}) => (
+          <FormItem>
+            <FormLabel className="text-base">{label}</FormLabel>
+            <FormControl>
+              <Input
+                className="mt-2 mb-5 w-80 bg-transparent rounded-full"
+                placeholder={placeholder}
+                type={inputType || 'text'}
+                {...field}
+              />
+            </FormControl>
+            {description && <FormDescription>{description}</FormDescription>}
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </>
   )
 }
 export default InicioSesionForm

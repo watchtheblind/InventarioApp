@@ -1,8 +1,10 @@
+'use client'
 import Image from 'next/image'
 import {Label} from '@/components/ui/label'
 import {Input} from '@/components/ui/input'
 import {Button} from '@/components/ui/button'
 import InicioSesionForm from '@/components/InicioSesionForm'
+
 export default function Login() {
   return (
     <main className="bg-[#26313c] h-screen flex items-center justify-center p-10">
@@ -15,9 +17,6 @@ export default function Login() {
             </p>
           </div>
           <InicioSesionForm></InicioSesionForm>
-          <p className="mt-4 text-xs text-slate-200">
-            2024 - SISTEMA DE INVENTARIO
-          </p>
         </div>
         <div className="relative hidden md:block">
           <Image
