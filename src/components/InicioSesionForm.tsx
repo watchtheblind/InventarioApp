@@ -21,7 +21,7 @@ import {z} from '@/components/zod-es.js'
 /* La declaración `const formSchema` crea un esquema utilizando la biblioteca Zod para la validación del formulario.
 En este caso, define un objeto de esquema con dos campos: "correo electrónico" y "contraseña". */
 const formSchema = z.object({
-  correo: z.string().min(11).max(40),
+  correo: z.string().min(11).max(50),
   password: z.string().min(6).max(50),
 })
 
@@ -63,6 +63,7 @@ instancia para el formulario de inicio de sesión. */
           onSubmit={form.handleSubmit(obtenerDatosInicioSesion)}
           className=" justify-center space-y-4">
           <SignupFormField
+            cantidadCaracteres={30}
             name="correo"
             label="Correo Electrónico"
             placeholder="correo"
@@ -70,6 +71,7 @@ instancia para el formulario de inicio de sesión. */
             formControl={form.control}
           />
           <SignupFormField
+            cantidadCaracteres={20}
             name="password"
             label="Contraseña"
             placeholder="Password"
@@ -85,9 +87,7 @@ instancia para el formulario de inicio de sesión. */
           </div>
         </form>
       </Form>
-      <p className="mt-4 text-xs text-slate-200">
-        2024 - SISTEMA DE INVENTARIO
-      </p>
+      <p className="mt-4 text-xs text-slate-200">2024 - AppInventario</p>
       <div className={Error ? 'visible' : 'invisible'}>
         <AlertDestructive mensaje="Usuario no encontrado" />
       </div>
@@ -103,6 +103,7 @@ interface SignupFormFieldProps {
   placeholder: string
   description?: string
   inputType?: string
+  cantidadCaracteres: number
   formControl: Control<z.infer<typeof formSchema>, any>
 }
 const SignupFormField: React.FC<SignupFormFieldProps> = ({
@@ -111,6 +112,7 @@ const SignupFormField: React.FC<SignupFormFieldProps> = ({
   placeholder,
   description,
   inputType,
+  cantidadCaracteres,
   formControl,
 }) => {
   return (
@@ -123,6 +125,7 @@ const SignupFormField: React.FC<SignupFormFieldProps> = ({
             <FormLabel className="text-base">{label}</FormLabel>
             <FormControl>
               <Input
+                maxLength={cantidadCaracteres}
                 className="mt-2 mb-5 w-80 bg-transparent rounded-full"
                 placeholder={placeholder}
                 type={inputType || 'text'}
