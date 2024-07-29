@@ -26,8 +26,27 @@ const formSchema = z.object({
 })
 
 const InicioSesionForm = () => {
+  const [intentos, setIntentos] = useState(1)
   const [Error, setError] = useState(false)
+  const [mensajeAlerta, setMensajeAlerta] = useState('Usuario no encontrado')
   const router = useRouter()
+  const bloquearLogin = async () => {
+    const elementosDelLogin = document.querySelectorAll('.elemento-login')
+    elementosDelLogin.forEach((elementoDelLogin) => {
+      elementoDelLogin.setAttribute('disabled', '')
+    })
+  }
+
+  const desbloquearLoginEn10Segundos = async () => {
+    await bloquearLogin()
+    setTimeout(() => {
+      const elementosDelLogin = document.querySelectorAll('.elemento-login')
+      elementosDelLogin.forEach((elementoDelLogin) => {
+        elementoDelLogin.removeAttribute('disabled')
+      })
+      setError((error) => !error)
+    }, 10000)
+  }
   /* Este fragmento de código utiliza el hook `useForm` de la biblioteca `react-hook-form` para crear un formulario
 instancia para el formulario de inicio de sesión. */
   const form = useForm<z.infer<typeof formSchema>>({
@@ -51,7 +70,19 @@ instancia para el formulario de inicio de sesión. */
           body: JSON.stringify({correo, password}),
         },
       )
-      response.ok ? router.push('/modulos/dashboard') : setError(true)
+      response.ok
+        ? (setIntentos(0), router.push('/modulos/dashboard'))
+        : (() => {
+            setError(true)
+            setIntentos(intentos + 1)
+            console.log(intentos)
+            intentos === 3
+              ? (setMensajeAlerta(
+                  'Se ha excedido el número de intentos. Espere 10 segundos.',
+                ),
+                desbloquearLoginEn10Segundos())
+              : ''
+          })()
     } catch (error) {
       console.error(error)
     }
@@ -62,7 +93,7 @@ instancia para el formulario de inicio de sesión. */
         <form
           onSubmit={form.handleSubmit(obtenerDatosInicioSesion)}
           className=" justify-center space-y-4">
-          <SignupFormField
+          <CampoFormulario
             cantidadCaracteres={30}
             name="correo"
             label="Correo Electrónico"
@@ -70,7 +101,7 @@ instancia para el formulario de inicio de sesión. */
             inputType="email"
             formControl={form.control}
           />
-          <SignupFormField
+          <CampoFormulario
             cantidadCaracteres={20}
             name="password"
             label="Contraseña"
@@ -81,23 +112,26 @@ instancia para el formulario de inicio de sesión. */
           <div className="flex justify-center">
             <Button
               type="submit"
-              className="w-60 mt-3 bg-[#5C776B] rounded-full hover:bg-[#475D53]">
+              className="w-60 mt-3 bg-[#5C776B] rounded-full hover:bg-[#475D53] elemento-login">
               Iniciar Sesión
             </Button>
           </div>
         </form>
       </Form>
-      <p className="mt-4 text-xs text-slate-200">2024 - AppInventario</p>
-      <div className={Error ? 'visible' : 'invisible'}>
-        <AlertDestructive mensaje="Usuario no encontrado" />
-      </div>
+      {Error ? (
+        <div className="mt-4 visible animate-pulse">
+          <AlertDestructive mensaje={mensajeAlerta} />
+        </div>
+      ) : (
+        ''
+      )}
     </>
   )
 }
 
-/* La `interfaz SignupFormFieldProps` define los props que el componente `SignupFormField`
+/* La `interfaz CampoFormularioProps` define los props que el componente `CampoFormulario`
 espera recibir. */
-interface SignupFormFieldProps {
+interface CampoFormularioProps {
   name: FieldPath<z.infer<typeof formSchema>>
   label: string
   placeholder: string
@@ -106,7 +140,9 @@ interface SignupFormFieldProps {
   cantidadCaracteres: number
   formControl: Control<z.infer<typeof formSchema>, any>
 }
-const SignupFormField: React.FC<SignupFormFieldProps> = ({
+
+// Definiendo la estructura de los campos del formulario
+const CampoFormulario: React.FC<CampoFormularioProps> = ({
   name,
   label,
   placeholder,
@@ -126,7 +162,7 @@ const SignupFormField: React.FC<SignupFormFieldProps> = ({
             <FormControl>
               <Input
                 maxLength={cantidadCaracteres}
-                className="mt-2 mb-5 w-80 bg-transparent rounded-full"
+                className="mt-2 mb-5 w-80 bg-transparent rounded-full elemento-login"
                 placeholder={placeholder}
                 type={inputType || 'text'}
                 {...field}

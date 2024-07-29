@@ -6,7 +6,7 @@ interface AlertDestructiveProps {
 }
 export function AlertDestructive(props: AlertDestructiveProps) {
   return (
-    <Alert variant="destructive" className="h-15 w-60">
+    <Alert variant="destructive" className="h-15 w-auto">
       <ExclamationTriangleIcon className="h-4 w-4" />
       <AlertDescription className="flex justify-center">
         {props.mensaje}
