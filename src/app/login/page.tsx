@@ -14,6 +14,9 @@ export default function Login() {
             </p>
           </div>
           <InicioSesionForm></InicioSesionForm>
+          <p className="mt-4 text-xs text-slate-200 flex align-bottom">
+            2024 - AppInventario
+          </p>
         </div>
         <div className="relative hidden md:block">
           <Image
