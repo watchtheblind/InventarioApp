@@ -1,8 +1,9 @@
 'use client'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Button} from '@/components/ui/button'
 import {useRouter} from 'next/navigation'
 import {AlertDestructive} from '@/components/Alerta'
+import {UpdateIcon} from '@radix-ui/react-icons'
 import {
   Form,
   FormControl,
@@ -28,6 +29,7 @@ const formSchema = z.object({
 const InicioSesionForm = () => {
   const [intentos, setIntentos] = useState(1)
   const [Error, setError] = useState(false)
+  const [cargando, setCargando] = useState(false)
   const [mensajeAlerta, setMensajeAlerta] = useState('Usuario no encontrado')
   const router = useRouter()
   const bloquearLogin = async () => {
@@ -62,6 +64,7 @@ instancia para el formulario de inicio de sesión. */
   ) => {
     const {correo, password} = values //values.correo y values.password
     try {
+      setCargando(true)
       const response = await fetch(
         'https://gestor-de-inventario.onrender.com/api/v1/auth/login',
         {
@@ -70,12 +73,12 @@ instancia para el formulario de inicio de sesión. */
           body: JSON.stringify({correo, password}),
         },
       )
+      setCargando(false)
       response.ok
         ? (setIntentos(0), router.push('/modulos/dashboard'))
         : (() => {
             setError(true)
             setIntentos(intentos + 1)
-            console.log(intentos)
             intentos === 3
               ? (setMensajeAlerta(
                   'Se ha excedido el número de intentos. Espere 10 segundos.',
@@ -114,6 +117,11 @@ instancia para el formulario de inicio de sesión. */
               type="submit"
               className="w-60 mt-3 bg-[#5C776B] rounded-full hover:bg-[#475D53] elemento-login">
               Iniciar Sesión
+              {cargando ? (
+                <UpdateIcon className="ml-2 animate-spin"></UpdateIcon>
+              ) : (
+                ''
+              )}
             </Button>
           </div>
         </form>
