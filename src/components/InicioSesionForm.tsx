@@ -31,21 +31,12 @@ const InicioSesionForm = () => {
   const [Error, setError] = useState(false)
   const [cargando, setCargando] = useState(false)
   const [mensajeAlerta, setMensajeAlerta] = useState('Usuario no encontrado')
+  const [deshabilitarBoton, setDeshabilitarBoton] = useState(false)
   const router = useRouter()
-  const bloquearLogin = async () => {
-    const elementosDelLogin = document.querySelectorAll('.elemento-login')
-    elementosDelLogin.forEach((elementoDelLogin) => {
-      elementoDelLogin.setAttribute('disabled', '')
-    })
-  }
-
   const desbloquearLoginEn10Segundos = async () => {
-    await bloquearLogin()
+    setDeshabilitarBoton(true)
     setTimeout(() => {
-      const elementosDelLogin = document.querySelectorAll('.elemento-login')
-      elementosDelLogin.forEach((elementoDelLogin) => {
-        elementoDelLogin.removeAttribute('disabled')
-      })
+      setDeshabilitarBoton(false)
       setError((error) => !error)
     }, 10000)
   }
@@ -97,6 +88,7 @@ instancia para el formulario de inicio de sesión. */
           onSubmit={form.handleSubmit(obtenerDatosInicioSesion)}
           className=" justify-center space-y-4">
           <CampoFormulario
+            disabled={cargando || deshabilitarBoton}
             cantidadCaracteres={30}
             name="correo"
             label="Correo Electrónico"
@@ -105,6 +97,7 @@ instancia para el formulario de inicio de sesión. */
             formControl={form.control}
           />
           <CampoFormulario
+            disabled={cargando || deshabilitarBoton}
             cantidadCaracteres={20}
             name="password"
             label="Contraseña"
@@ -115,7 +108,8 @@ instancia para el formulario de inicio de sesión. */
           <div className="flex justify-center">
             <Button
               type="submit"
-              className="w-60 mt-3 bg-[#5C776B] rounded-full hover:bg-[#475D53] elemento-login">
+              disabled={cargando || deshabilitarBoton}
+              className="w-60 mt-3 bg-[#5C776B] rounded-full hover:bg-[#475D53] boton-login">
               Iniciar Sesión
               {cargando ? (
                 <UpdateIcon className="ml-2 animate-spin"></UpdateIcon>
@@ -146,6 +140,7 @@ interface CampoFormularioProps {
   description?: string
   inputType?: string
   cantidadCaracteres: number
+  disabled?: any
   formControl: Control<z.infer<typeof formSchema>, any>
 }
 
@@ -158,6 +153,7 @@ const CampoFormulario: React.FC<CampoFormularioProps> = ({
   inputType,
   cantidadCaracteres,
   formControl,
+  disabled,
 }) => {
   return (
     <>
@@ -169,6 +165,7 @@ const CampoFormulario: React.FC<CampoFormularioProps> = ({
             <FormLabel className="text-base">{label}</FormLabel>
             <FormControl>
               <Input
+                disabled={disabled}
                 maxLength={cantidadCaracteres}
                 className="mt-2 mb-5 w-80 bg-transparent rounded-full elemento-login"
                 placeholder={placeholder}
