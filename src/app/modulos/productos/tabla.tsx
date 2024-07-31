@@ -3,6 +3,12 @@ import {DataTablePagination} from './paginacion'
 import * as React from 'react'
 import {FileText, Sheet, Plus, Trash} from 'lucide-react'
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
+import {
   ColumnDef,
   ColumnFiltersState,
   flexRender,
@@ -107,32 +113,71 @@ export function DataTable<TData, TValue>({
         </DropdownMenu>
         <ul className="flex mx-1 justify-around min-w-56">
           <li>
-            <Button variant="secondary" className="w- ml-auto">
-              <Plus className="w-4 h-4" />
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  {' '}
+                  <Button variant="secondary" className="w- ml-auto">
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Añadir Producto</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </li>
           <li>
-            <Button variant="ghost" className="w-auto ml-auto">
-              <FileText className="w-4 h-4" />
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  {' '}
+                  <Button variant="ghost" className="w-auto ml-auto">
+                    <FileText className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Exportar (pdf)</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </li>
           <li>
-            <Button variant="ghost" className="w-auto ml-auto">
-              <Sheet className="w-4 h-4" />
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  {' '}
+                  <Button variant="ghost" className="w-auto ml-auto">
+                    <Sheet className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Exportar (xlsx)</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </li>
           <li>
-            <Button
-              onMouseOver={() => {
-                setHover(true)
-              }}
-              onMouseOut={() => {
-                setHover(false)
-              }}
-              variant={Hover ? 'destructive' : 'ghost'}
-              className="w-auto ml-auto">
-              <Trash className="w-4 h-4" />
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    onMouseOver={() => {
+                      setHover(true)
+                    }}
+                    onMouseOut={() => {
+                      setHover(false)
+                    }}
+                    variant={Hover ? 'destructive' : 'ghost'}
+                    className="w-auto ml-auto">
+                    <Trash className="w-4 h-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Borrar</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </li>
         </ul>
       </div>
