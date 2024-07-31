@@ -3,6 +3,18 @@ import {DataTablePagination} from './paginacion'
 import * as React from 'react'
 import {FileText, Sheet, Plus, Trash} from 'lucide-react'
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -36,7 +48,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import {tree} from 'next/dist/build/templates/app-page'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -161,17 +172,38 @@ export function DataTable<TData, TValue>({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <Button
-                    onMouseOver={() => {
-                      setHover(true)
-                    }}
-                    onMouseOut={() => {
-                      setHover(false)
-                    }}
-                    variant={Hover ? 'destructive' : 'ghost'}
-                    className="w-auto ml-auto">
-                    <Trash className="w-4 h-4" />
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger>
+                      {' '}
+                      <Button
+                        onMouseOver={() => {
+                          setHover(true)
+                        }}
+                        onMouseOut={() => {
+                          setHover(false)
+                        }}
+                        variant={Hover ? 'destructive' : 'ghost'}
+                        className="w-auto ml-auto">
+                        <Trash className="w-4 h-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          ¿Está seguro de eliminar los productos?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Esta acción no puede ser deshecha. Esto borrará
+                          permanentemente los productos y sus datos de nuestros
+                          servidores.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction>Continuar</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Borrar</p>
