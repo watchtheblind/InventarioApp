@@ -176,6 +176,22 @@ export function DataTable<TData, TValue>({
                     <AlertDialogTrigger>
                       {' '}
                       <Button
+                        onClick={() => {
+                          const token = sessionStorage.getItem('token')
+                          alert(token)
+                          fetch(
+                            'https://gestor-de-inventario.onrender.com/api/v1/productos',
+                            {
+                              method: 'GET',
+                              headers: new Headers({
+                                'x-access-token': token ?? '',
+                              }),
+                            },
+                          )
+                            .then((response) => response.json())
+                            .then((data) => console.log(data))
+                            .catch((error) => console.error(error))
+                        }}
                         onMouseOver={() => {
                           setHover(true)
                         }}

@@ -3,10 +3,20 @@ import {Payment, columnas} from './columnas'
 import {DataTable} from './tabla'
 
 async function traerDatos(): Promise<Payment[]> {
-  // Fetch data from your API here.
+  const productos = await fetch(
+    'https://gestor-de-inventario.onrender.com/api/v1/productos',
+    {
+      method: 'GET',
+      headers: new Headers({
+        'x-access-token': '',
+      }),
+    },
+  )
+  const respuesta = await productos.json()
+  // .catch((error) => console.error(error))
   return [
     {
-      id: '728ed52f',
+      id: respuesta.productos[0]._id,
       amount: 100,
       status: 'pending',
       email: 'm@example.com',
