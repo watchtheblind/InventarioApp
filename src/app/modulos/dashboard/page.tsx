@@ -12,7 +12,7 @@ import {TarjetaRO} from '@/components/tarjetas/T-r-oscuro'
 const Dashboard = () => {
   //   const [colapsado, setColapsado] = useState(false)
   return (
-    <div className="w-full border border-blue-500">
+    <div className="w-full h-auto border border-blue-500">
       <div className="flex w-full 2xl:h-full xl:h-full lg:h-full md:h-auto sm:h-auto h-auto">
         <article className="h-full w-full">
           <article className="w-full h-full">
@@ -29,7 +29,7 @@ const Dashboard = () => {
                 <span className="text-gray-400">Dashboard</span>
               </div>
             </section>
-            <section className="border border-red-500 grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-y-4 gap-x-6 2xl:px-4 xl:px-4 lg:px-4 md:px-3 sm:px-2 px-2 pb-4">
+            <section className="border h-auto border-red-500 grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-y-4 gap-x-6 2xl:px-4 xl:px-4 lg:px-4 md:px-3 sm:px-2 px-2 pb-4">
               <TarjetaV></TarjetaV>
               <TarjetaD></TarjetaD>
               <TarjetaR></TarjetaR>

@@ -1,23 +1,16 @@
 'use client'
-import {Sidebar, Menu, MenuItem, SubMenu} from 'react-pro-sidebar'
 import {Nav} from '@/components/nav/nav'
+import {Menu} from '@/components/menu/menu'
 
 export default function ModulosLayout({children}: {children: React.ReactNode}) {
   return (
-    <html
-      lang="en"
-      className="2xl:max-h-screen xl:h-full lg:max-h-screen md:h-auto sm:h-auto max-h-screen">
+    <html lang="en">
       <body className="w-full h-full">
-        <div className="h-full w-full flex border-4 border-green-600">
-          <Sidebar className="flex w-96 2xl:h-full xl:h-full 2xl:w-[24.2rem] xl:w-[22.5rem] lg:w-[22rem] md:w-[17.8rem] sm:w-[16.9rem]">
-            <Menu className="w-full">
-              <MenuItem>Documentaion</MenuItem>
-              <MenuItem>Calendar</MenuItem>
-              <MenuItem>E-commerce</MenuItem>
-              <MenuItem>Examples</MenuItem>
-            </Menu>
-          </Sidebar>
-          <main className="w-full">
+        <div className="2xl:h-full xl:h-full lg:h-full md:h-full sm:h-full w-full flex border-4 border-green-600">
+          <div className="h-screen xl:w-1/6 lg:w-1/4 md:w-1/4 sm:w-1/4">
+            <Menu></Menu>
+          </div>
+          <main className="w-full flex flex-col flex-auto lg:w-3/4 md:w-3/4 sm:w-3/4 h-auto">
             <Nav></Nav>
             <div className="w-full"> {children} </div>
           </main>
