@@ -2,7 +2,6 @@
 import {DataTablePagination} from './paginacion'
 import * as React from 'react'
 import {FileText, Sheet, Plus, Trash} from 'lucide-react'
-const Cookies = require('js-cookie')
 import {
   AlertDialog,
   AlertDialogAction,
