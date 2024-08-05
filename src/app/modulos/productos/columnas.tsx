@@ -19,14 +19,15 @@ import {
 } from '@/components/ui/dropdown-menu'
 /* Este tipo se utiliza para definir la forma de nuestros datos.
 Si desea, puede utilizar un esquema Zod aquí. */
-export type Payment = {
+export type Productos = {
   id: string
-  amount: number
-  status: 'pending' | 'processing' | 'success' | 'failed'
-  email: string
+  nombre: string
+  precio: number
+  title: string
+  descripcion: string
 }
 
-export const columnas: ColumnDef<Payment>[] = [
+export const columnas: ColumnDef<Productos>[] = [
   {
     id: 'select',
     header: ({table}) => (
@@ -50,41 +51,49 @@ export const columnas: ColumnDef<Payment>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: 'amount',
+    accessorKey: 'cantidad',
     header: ({column}) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Amount
+          cantidad
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
     },
+  },
+  {
+    accessorKey: 'precio',
     cell: ({row}) => {
-      const amount = parseFloat(row.getValue('amount'))
+      const precio = parseFloat(row.getValue('precio'))
       const formatted = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
-      }).format(amount)
+      }).format(precio)
 
       return <div className="text-left font-medium">{formatted}</div>
     },
+    header: 'Precio',
   },
   {
-    accessorKey: 'email',
-    header: 'Email',
+    accessorKey: 'nombre',
+    header: 'Nombre',
   },
   {
-    accessorKey: 'id',
-    header: 'id',
+    accessorKey: '_id',
+    header: 'Id',
+  },
+  {
+    accessorKey: 'descripcion',
+    header: 'Descripcion',
   },
   //menú desplegable:
   {
-    id: 'Actions',
-    header: 'Actions',
+    id: 'Acciones',
+    header: 'Acciones',
     cell: ({row}) => {
-      const payment = row.original
+      const producto = row.original
 
       return (
         <DetallesProducto>
@@ -98,7 +107,7 @@ export const columnas: ColumnDef<Payment>[] = [
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(payment.id)}>
+                onClick={() => navigator.clipboard.writeText(producto.id)}>
                 Copiar ID del producto
               </DropdownMenuItem>
               <DropdownMenuSeparator />

@@ -1,9 +1,10 @@
 'use client'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useTransition} from 'react'
 import {Button} from '@/components/ui/button'
 import {useRouter} from 'next/navigation'
 import {AlertDestructive} from '@/components/Alerta'
 import {UpdateIcon} from '@radix-ui/react-icons'
+import {setCookie} from 'cookies-next'
 import {
   Form,
   FormControl,
@@ -15,7 +16,7 @@ import {
 } from '@/components/ui/form'
 import {Input} from '@/components/ui/input'
 import {zodResolver} from '@hookform/resolvers/zod'
-import {useForm} from 'react-hook-form'
+import {useForm, useFormContext} from 'react-hook-form'
 import type {Control, FieldPath} from 'react-hook-form'
 import {z} from '@/components/zod-es.js'
 
@@ -27,9 +28,10 @@ const formSchema = z.object({
 })
 
 const InicioSesionForm = () => {
+  const [isPending, startTransition] = useTransition()
   const [intentos, setIntentos] = useState(1)
   const [Error, setError] = useState(false)
-  const [cargando, setCargando] = useState(false)
+  // const [cargando, setCargando] = useState(false)
   const [mensajeAlerta, setMensajeAlerta] = useState('Usuario no encontrado')
   const [deshabilitarBoton, setDeshabilitarBoton] = useState(false)
   const router = useRouter()
@@ -55,28 +57,32 @@ instancia para el formulario de inicio de sesión. */
   ) => {
     const {correo, password} = values //values.correo y values.password
     try {
-      setCargando(true)
-      const response = await fetch(
-        'https://gestor-de-inventario.onrender.com/api/v1/auth/login',
-        {
-          method: 'POST',
-          headers: {'Content-type': 'application/json'},
-          body: JSON.stringify({correo, password}),
-        },
-      )
-      setCargando(false)
-      response.ok
-        ? (setIntentos(0), router.push('/modulos/dashboard'))
-        : (() => {
-            setError(true)
-            setIntentos(intentos + 1)
-            intentos === 3
-              ? (setMensajeAlerta(
-                  'Se ha excedido el número de intentos. Espere 10 segundos.',
-                ),
-                desbloquearLoginEn10Segundos())
-              : ''
-          })()
+      startTransition(async () => {
+        const response = await fetch(
+          'https://gestor-de-inventario.onrender.com/api/v1/auth/login',
+          {
+            method: 'POST',
+            headers: {'Content-type': 'application/json'},
+            body: JSON.stringify({correo, password}),
+          },
+        )
+        if (!response.ok) {
+          setError(true)
+          setIntentos(intentos + 1)
+          intentos === 3
+            ? (setMensajeAlerta(
+                'Se ha excedido el número de intentos. Espere 10 segundos.',
+              ),
+              desbloquearLoginEn10Segundos())
+            : ''
+          return
+        }
+        const res = await response.json()
+        setCookie('token', res.token)
+        console.log('inicio de sesion ' + res.token)
+        setIntentos(0)
+        router.push('/modulos/dashboard')
+      })
     } catch (error) {
       console.error(error)
     }
@@ -88,30 +94,28 @@ instancia para el formulario de inicio de sesión. */
           onSubmit={form.handleSubmit(obtenerDatosInicioSesion)}
           className=" justify-center space-y-4">
           <CampoFormulario
-            disabled={cargando || deshabilitarBoton}
+            disabled={isPending || deshabilitarBoton}
             cantidadCaracteres={30}
             name="correo"
             label="Correo Electrónico"
             placeholder="correo"
             inputType="email"
-            formControl={form.control}
           />
           <CampoFormulario
-            disabled={cargando || deshabilitarBoton}
+            disabled={isPending || deshabilitarBoton}
             cantidadCaracteres={20}
             name="password"
             label="Contraseña"
             placeholder="Password"
             inputType="password"
-            formControl={form.control}
           />
           <div className="flex justify-center">
             <Button
               type="submit"
-              disabled={cargando || deshabilitarBoton}
+              disabled={isPending || deshabilitarBoton}
               className="w-60 mt-3 bg-[#5C776B] rounded-full hover:bg-[#475D53] boton-login">
               Iniciar Sesión
-              {cargando ? (
+              {isPending ? (
                 <UpdateIcon className="ml-2 animate-spin"></UpdateIcon>
               ) : (
                 ''
@@ -141,7 +145,6 @@ interface CampoFormularioProps {
   inputType?: string
   cantidadCaracteres: number
   disabled?: any
-  formControl: Control<z.infer<typeof formSchema>, any>
 }
 
 // Definiendo la estructura de los campos del formulario
@@ -152,13 +155,13 @@ const CampoFormulario: React.FC<CampoFormularioProps> = ({
   description,
   inputType,
   cantidadCaracteres,
-  formControl,
   disabled,
 }) => {
+  const {control} = useFormContext()
   return (
     <>
       <FormField
-        control={formControl}
+        control={control}
         name={name}
         render={({field}) => (
           <FormItem>

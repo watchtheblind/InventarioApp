@@ -2,6 +2,7 @@
 import {DataTablePagination} from './paginacion'
 import * as React from 'react'
 import {FileText, Sheet, Plus, Trash} from 'lucide-react'
+const Cookies = require('js-cookie')
 import {
   AlertDialog,
   AlertDialogAction,
@@ -85,15 +86,14 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
   })
-
   return (
     <>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Buscar correo..."
-          value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
+          placeholder="Buscar nombre..."
+          value={(table.getColumn('nombre')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
-            table.getColumn('email')?.setFilterValue(event.target.value)
+            table.getColumn('nombre')?.setFilterValue(event.target.value)
           }
           className="max-w-xs"
         />
@@ -176,22 +176,6 @@ export function DataTable<TData, TValue>({
                     <AlertDialogTrigger>
                       {' '}
                       <Button
-                        onClick={() => {
-                          const token = sessionStorage.getItem('token')
-                          alert(token)
-                          fetch(
-                            'https://gestor-de-inventario.onrender.com/api/v1/productos',
-                            {
-                              method: 'GET',
-                              headers: new Headers({
-                                'x-access-token': token ?? '',
-                              }),
-                            },
-                          )
-                            .then((response) => response.json())
-                            .then((data) => console.log(data))
-                            .catch((error) => console.error(error))
-                        }}
                         onMouseOver={() => {
                           setHover(true)
                         }}
@@ -270,7 +254,7 @@ export function DataTable<TData, TValue>({
                 <TableCell
                   colSpan={columns.length}
                   className="h-24 text-center">
-                  No results.
+                  Sin resultados.
                 </TableCell>
               </TableRow>
             )}
