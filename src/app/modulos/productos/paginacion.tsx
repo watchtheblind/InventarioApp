@@ -81,7 +81,7 @@ export function DataTablePagination<TData>({
             className="hidden h-8 w-8 p-0 lg:flex"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}>
-            <span className="sr-only">Go to last page</span>
+            <span className="sr-only">Ir a la última página</span>
             <DoubleArrowRightIcon className="h-4 w-4" />
           </Button>
         </div>

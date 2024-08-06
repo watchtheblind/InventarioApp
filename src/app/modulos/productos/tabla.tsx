@@ -2,6 +2,7 @@
 import {DataTablePagination} from './paginacion'
 import * as React from 'react'
 import {FileText, Sheet, Plus, Trash} from 'lucide-react'
+import {ModalCrearProducto} from './modalCrearProducto'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -127,9 +128,12 @@ export function DataTable<TData, TValue>({
               <Tooltip>
                 <TooltipTrigger>
                   {' '}
-                  <Button variant="secondary" className="w- ml-auto">
-                    <Plus className="w-4 h-4" />
-                  </Button>
+                  <ModalCrearProducto
+                    Boton={
+                      <Button variant="secondary" className="w- ml-auto">
+                        <Plus className="w-4 h-4" />
+                      </Button>
+                    }></ModalCrearProducto>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Añadir Producto</p>
