@@ -1,6 +1,7 @@
 import {z} from 'zod'
+import {Form, useForm} from 'react-hook-form'
 
-const EsquemaProductos = z.object({
+export const EsquemaProductos = z.object({
   nombre: z
     .string()
     .min(1, {message: 'El campo no puede estar vacío'})
@@ -15,7 +16,8 @@ const EsquemaProductos = z.object({
   _id: z
     .string()
     .min(10, {message: 'La descripción debe tener al menos 10 caracteres'})
-    .max(50, {message: 'La descripción no debe exceder de 50 caracteres'}),
+    .max(50, {message: 'La descripción no debe exceder de 50 caracteres'})
+    .toLowerCase(),
   descripcion: z
     .string()
     .min(10, {message: 'La descripción debe tener al menos 10 caracteres'})
