@@ -87,7 +87,7 @@ export const ModalCrearProducto: React.FC<Props> = (props) => {
                 <Button
                   type="submit"
                   className="w-60 mt-3 bg-[#5C776B] rounded-full hover:bg-[#475D53] boton-login">
-                  Iniciar Sesión
+                  Guardar Datos
                 </Button>
               </div>
             </form>
