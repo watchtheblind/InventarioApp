@@ -17,7 +17,7 @@ interface CampoFormularioProps {
   label: string
   placeholder: string
   description?: string
-  inputType?: string
+  inputType?: any
   cantidadCaracteres: number
 }
 

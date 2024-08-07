@@ -1,8 +1,6 @@
-'use client'
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -14,9 +12,24 @@ import {EsquemaProductos} from '@/app/hooks/EsquemaProductos'
 import {z} from 'zod'
 import {Form} from '@/components/ui/form'
 import {CampoFormulario} from './camposFormulario'
-
+import {getCookie} from 'cookies-next'
 type Props = {
   Boton: any
+}
+const guardarDatos = (campos: z.infer<typeof EsquemaProductos>) => {
+  const token = getCookie('token')
+  const {nombre, precio, cantidad, descripcion} = campos
+  if (!token) {
+    throw new Error('Token no encontrado')
+  }
+  fetch('https://gestor-de-inventario.onrender.com/api/v1/productos', {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json',
+      'x-access-token': token,
+    },
+    body: JSON.stringify({nombre, precio, cantidad, descripcion}),
+  })
 }
 
 export const ModalCrearProducto: React.FC<Props> = (props) => {
@@ -25,16 +38,11 @@ export const ModalCrearProducto: React.FC<Props> = (props) => {
     defaultValues: {
       nombre: '',
       descripcion: '',
-      _id: '',
       cantidad: 1,
       precio: 1,
     },
   })
   const {handleSubmit} = form
-
-  function submitar(values: z.infer<typeof EsquemaProductos>) {
-    console.log(values)
-  }
 
   return (
     <Dialog>
@@ -47,7 +55,7 @@ export const ModalCrearProducto: React.FC<Props> = (props) => {
         </DialogHeader>
         <div className="grid gap-4 py-4 justify-center">
           <Form {...form}>
-            <form onSubmit={handleSubmit(submitar)}>
+            <form onSubmit={handleSubmit(guardarDatos)}>
               <CampoFormulario
                 cantidadCaracteres={30}
                 name="nombre"
@@ -63,13 +71,6 @@ export const ModalCrearProducto: React.FC<Props> = (props) => {
                 inputType="number"
               />
               <CampoFormulario
-                cantidadCaracteres={15}
-                name="_id"
-                label="Serial/ID"
-                placeholder="12fD455g45B"
-                inputType="text"
-              />
-              <CampoFormulario
                 cantidadCaracteres={60}
                 name="descripcion"
                 label="Descripcion"
@@ -81,9 +82,9 @@ export const ModalCrearProducto: React.FC<Props> = (props) => {
                 name="cantidad"
                 label="Cantidad"
                 placeholder="1000"
-                inputType="text"
+                inputType="number"
               />
-              <div className="flex justify-center">
+              <div className="flex justify-center mt-3">
                 <Button
                   type="submit"
                   className="w-60 mt-3 bg-[#5C776B] rounded-full hover:bg-[#475D53] boton-login">
