@@ -13,39 +13,42 @@ import {z} from 'zod'
 import {Form} from '@/components/ui/form'
 import {CampoFormulario} from './camposFormulario'
 import {getCookie} from 'cookies-next'
+import {useState} from 'react'
+
 type Props = {
   Boton: any
 }
-const guardarDatos = (campos: z.infer<typeof EsquemaProductos>) => {
-  const token = getCookie('token')
-  const {nombre, precio, cantidad, descripcion} = campos
-  if (!token) {
-    throw new Error('Token no encontrado')
-  }
-  fetch('https://gestor-de-inventario.onrender.com/api/v1/productos', {
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/json',
-      'x-access-token': token,
-    },
-    body: JSON.stringify({nombre, precio, cantidad, descripcion}),
-  })
-}
 
 export const ModalCrearProducto: React.FC<Props> = (props) => {
+  const [abierto, setAbierto] = useState(false)
+  const guardarDatos = (campos: z.infer<typeof EsquemaProductos>) => {
+    const token = getCookie('token')
+    const {nombre, precio, cantidad, descripcion} = campos
+    if (!token) {
+      throw new Error('Token no encontrado')
+    }
+    fetch('https://gestor-de-inventario.onrender.com/api/v1/productos', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify({nombre, precio, cantidad, descripcion}),
+    })
+    setAbierto(false)
+  }
+
   const form = useForm<z.infer<typeof EsquemaProductos>>({
     resolver: zodResolver(EsquemaProductos),
     defaultValues: {
       nombre: '',
       descripcion: '',
-      cantidad: 1,
-      precio: 1,
     },
   })
   const {handleSubmit} = form
 
   return (
-    <Dialog>
+    <Dialog open={abierto} onOpenChange={setAbierto}>
       <DialogTrigger asChild>{props.Boton}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
