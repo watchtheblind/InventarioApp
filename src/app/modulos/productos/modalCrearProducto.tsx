@@ -8,12 +8,13 @@ import {
 import {Button} from '@/components/ui/button'
 import {useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
-import {EsquemaProductos} from '@/app/hooks/EsquemaProductos'
+import {EsquemaProductos} from '@/app/hooks/productos/EsquemaProductos'
 import {z} from 'zod'
 import {Form} from '@/components/ui/form'
 import {CampoFormulario} from './camposFormulario'
 import {getCookie} from 'cookies-next'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
+import {useToast} from '@/components/ui/use-toast'
 
 type Props = {
   Boton: any
@@ -21,8 +22,11 @@ type Props = {
 
 export const ModalCrearProducto: React.FC<Props> = (props) => {
   const [abierto, setAbierto] = useState(false)
+  const {toast} = useToast()
+
   const guardarDatos = (campos: z.infer<typeof EsquemaProductos>) => {
     const token = getCookie('token')
+
     const {nombre, precio, cantidad, descripcion} = campos
     if (!token) {
       throw new Error('Token no encontrado')
@@ -35,7 +39,20 @@ export const ModalCrearProducto: React.FC<Props> = (props) => {
       },
       body: JSON.stringify({nombre, precio, cantidad, descripcion}),
     })
-    setAbierto(false)
+      .then(() => {
+        setAbierto(false)
+        toast({
+          title: '¡Datos guardados con exito! 😜',
+          description: nombre,
+        })
+      })
+      .catch((error) => {
+        toast({
+          variant: 'destructive',
+          title: '¡Ups! parece que ocurrió un error 🤔',
+          description: error,
+        })
+      })
   }
 
   const form = useForm<z.infer<typeof EsquemaProductos>>({
