@@ -9,6 +9,7 @@ import {Button} from '@/components/ui/button'
 import {Checkbox} from '@/components/ui/checkbox'
 import DetallesProducto from './detallesProducto'
 import {DialogTrigger} from '@radix-ui/react-dialog'
+import {useState} from 'react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,14 +37,34 @@ export const columnas: ColumnDef<Productos>[] = [
           table.getIsAllPageRowsSelected() ||
           (table.getIsSomePageRowsSelected() && 'indeterminate')
         }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        onCheckedChange={(value) => {
+          table.toggleAllPageRowsSelected(!!value)
+          if (value) {
+            setTimeout(() => {
+              console.log(
+                Object.values(table.getSelectedRowModel().rowsById).map(
+                  (item) => item.original,
+                ),
+              )
+            }, 0)
+          }
+        }}
         aria-label="Select all"
       />
     ),
-    cell: ({row}) => (
+    cell: ({row, table}) => (
       <Checkbox
         checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        onCheckedChange={(value) => {
+          row.toggleSelected(!!value)
+          setTimeout(() => {
+            console.log(
+              Object.values(table.getSelectedRowModel().rowsById).map(
+                (item) => item.original,
+              ),
+            )
+          }, 0)
+        }}
         aria-label="Select row"
       />
     ),
@@ -94,7 +115,6 @@ export const columnas: ColumnDef<Productos>[] = [
     header: 'Acciones',
     cell: ({row}) => {
       const producto = row.original
-
       return (
         <DetallesProducto>
           <DropdownMenu>
