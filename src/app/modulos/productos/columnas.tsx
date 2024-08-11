@@ -9,7 +9,6 @@ import {Button} from '@/components/ui/button'
 import {Checkbox} from '@/components/ui/checkbox'
 import DetallesProducto from './detallesProducto'
 import {DialogTrigger} from '@radix-ui/react-dialog'
-import {useState} from 'react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,13 +19,15 @@ import {
 } from '@/components/ui/dropdown-menu'
 /* Este tipo se utiliza para definir la forma de nuestros datos.
 Si desea, puede utilizar un esquema Zod aquí. */
+
 export type Productos = {
-  id: string
+  _id: string
   nombre: string
   precio: number
   title: string
   descripcion: string
 }
+export let productosSeleccionados = {}
 
 export const columnas: ColumnDef<Productos>[] = [
   {
@@ -39,15 +40,13 @@ export const columnas: ColumnDef<Productos>[] = [
         }
         onCheckedChange={(value) => {
           table.toggleAllPageRowsSelected(!!value)
-          if (value) {
-            setTimeout(() => {
-              console.log(
-                Object.values(table.getSelectedRowModel().rowsById).map(
-                  (item) => item.original,
-                ),
-              )
-            }, 0)
-          }
+          setTimeout(() => {
+            const valoresDeFilasMarcadas = Object.values(
+              table.getSelectedRowModel().rowsById,
+            ).map((item) => item.original)
+            productosSeleccionados = {...valoresDeFilasMarcadas}
+            console.log(productosSeleccionados)
+          }, 0)
         }}
         aria-label="Select all"
       />
@@ -58,11 +57,11 @@ export const columnas: ColumnDef<Productos>[] = [
         onCheckedChange={(value) => {
           row.toggleSelected(!!value)
           setTimeout(() => {
-            console.log(
-              Object.values(table.getSelectedRowModel().rowsById).map(
-                (item) => item.original,
-              ),
-            )
+            const valoresDeFilasMarcadas = Object.values(
+              table.getSelectedRowModel().rowsById,
+            ).map((item) => item.original)
+            productosSeleccionados = {...valoresDeFilasMarcadas}
+            console.log(productosSeleccionados)
           }, 0)
         }}
         aria-label="Select row"
@@ -120,14 +119,14 @@ export const columnas: ColumnDef<Productos>[] = [
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
+                <span className="sr-only">Abrir menú</span>
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuLabel>Acciones</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(producto.id)}>
+                onClick={() => navigator.clipboard.writeText(producto._id)}>
                 Copiar ID del producto
               </DropdownMenuItem>
               <DropdownMenuSeparator />
