@@ -8,7 +8,7 @@ import {
 import {Button} from '@/components/ui/button'
 import {useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
-import {EsquemaProductos} from '@/app/hooks/productos/EsquemaProductos'
+import {EsquemaProductos} from '@/app/helpers/productos/EsquemaProductos'
 import {z} from 'zod'
 import {Form} from '@/components/ui/form'
 import {CampoFormulario} from './camposFormulario'

@@ -2,7 +2,6 @@
  Definen los datos que se mostrarán, cómo se formatearán, ordenarán y filtrarán.*/
 
 'use client'
-
 import {ColumnDef} from '@tanstack/react-table'
 import {ArrowUpDown, MoreHorizontal} from 'lucide-react'
 import {Button} from '@/components/ui/button'
@@ -26,8 +25,10 @@ export type Productos = {
   precio: number
   title: string
   descripcion: string
+  cantidad: number
 }
-export let productosSeleccionados = {}
+
+export let productosSeleccionados: Productos[] = []
 
 export const columnas: ColumnDef<Productos>[] = [
   {
@@ -44,7 +45,7 @@ export const columnas: ColumnDef<Productos>[] = [
             const valoresDeFilasMarcadas = Object.values(
               table.getSelectedRowModel().rowsById,
             ).map((item) => item.original)
-            productosSeleccionados = {...valoresDeFilasMarcadas}
+            productosSeleccionados = valoresDeFilasMarcadas
             console.log(productosSeleccionados)
           }, 0)
         }}
@@ -60,7 +61,7 @@ export const columnas: ColumnDef<Productos>[] = [
             const valoresDeFilasMarcadas = Object.values(
               table.getSelectedRowModel().rowsById,
             ).map((item) => item.original)
-            productosSeleccionados = {...valoresDeFilasMarcadas}
+            productosSeleccionados = valoresDeFilasMarcadas
             console.log(productosSeleccionados)
           }, 0)
         }}

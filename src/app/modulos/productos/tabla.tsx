@@ -3,6 +3,7 @@ import {DataTablePagination} from './paginacion'
 import * as React from 'react'
 import {FileText, Sheet, Plus, Trash} from 'lucide-react'
 import {ModalCrearProducto} from './modalCrearProducto'
+import {crearExcel} from '@/app/helpers/excel/crearExcel'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -86,6 +87,14 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
   })
+
+  const handleExportData = () => {
+    const allRows = table.getRowModel().rows
+    const data = allRows.map((row) => row.original)
+    console.log(data) // Aquí puedes ver los datos exportados
+    return data // Puedes hacer algo con los datos, como enviarlos a un servidor o descargarlos como archivo
+  }
+
   return (
     <>
       <div className="flex items-center py-4">
@@ -159,7 +168,12 @@ export function DataTable<TData, TValue>({
               <Tooltip>
                 <TooltipTrigger>
                   {' '}
-                  <Button variant="ghost" className="w-auto ml-auto">
+                  <Button
+                    onClick={() => {
+                      crearExcel(handleExportData())
+                    }}
+                    variant="ghost"
+                    className="w-auto ml-auto">
                     <Sheet className="w-4 h-4" />
                   </Button>
                 </TooltipTrigger>
