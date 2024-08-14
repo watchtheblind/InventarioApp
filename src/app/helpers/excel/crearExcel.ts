@@ -1,7 +1,6 @@
 const ExcelJS = require('exceljs')
 export const crearExcel = async (data: object) => {
   try {
-    console.log('Inicio de la creación del archivo')
     const workbook = new ExcelJS.Workbook()
     workbook.created = new Date()
     const sheet = workbook.addWorksheet('Productos')
@@ -15,18 +14,18 @@ export const crearExcel = async (data: object) => {
     ]
 
     sheet.addRows(data)
-    console.log('Datos agregados al archivo')
-
-    //creating file
+    //creando el archivo
     const buffer = await workbook.xlsx.writeBuffer()
     const blob = new Blob([buffer], {
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     })
+    //haciendo el archivo descargable mediante la creación de un link auto-clickeable
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = 'prueba.xlsx'
+    a.download = 'Productos.xlsx'
     a.click()
+    URL.revokeObjectURL(url)
   } catch (error) {
     console.error('Error al crear el archivo:', error)
   }

@@ -4,6 +4,7 @@ import * as React from 'react'
 import {FileText, Sheet, Plus, Trash} from 'lucide-react'
 import {ModalCrearProducto} from './modalCrearProducto'
 import {crearExcel} from '@/app/helpers/excel/crearExcel'
+import {crearPDF} from '@/app/helpers/pdf/crearPdf'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -88,11 +89,10 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
   })
 
-  const handleExportData = () => {
-    const allRows = table.getRowModel().rows
-    const data = allRows.map((row) => row.original)
-    console.log(data) // Aquí puedes ver los datos exportados
-    return data // Puedes hacer algo con los datos, como enviarlos a un servidor o descargarlos como archivo
+  const datosDeTablaProductos = () => {
+    const todasLasFilas = table.getRowModel().rows
+    const datos = todasLasFilas.map((fila) => fila.original)
+    return datos // Puedes hacer algo con los datos, como enviarlos a un servidor o descargarlos como archivo
   }
 
   return (
@@ -153,7 +153,12 @@ export function DataTable<TData, TValue>({
               <Tooltip>
                 <TooltipTrigger>
                   {' '}
-                  <Button variant="ghost" className="w-auto ml-auto">
+                  <Button
+                    onClick={() => {
+                      crearPDF(datosDeTablaProductos())
+                    }}
+                    variant="ghost"
+                    className="w-auto ml-auto">
                     <FileText className="w-4 h-4" />
                   </Button>
                 </TooltipTrigger>
@@ -170,7 +175,7 @@ export function DataTable<TData, TValue>({
                   {' '}
                   <Button
                     onClick={() => {
-                      crearExcel(handleExportData())
+                      crearExcel(datosDeTablaProductos())
                     }}
                     variant="ghost"
                     className="w-auto ml-auto">
