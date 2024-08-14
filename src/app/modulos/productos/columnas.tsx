@@ -131,9 +131,13 @@ export const columnas: ColumnDef<Productos>[] = [
                 Copiar ID del producto
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Ver proveedor</DropdownMenuItem>
+              <DropdownMenuItem disabled>
+                Ver proveedor (proximamente)
+              </DropdownMenuItem>
               <DialogTrigger asChild>
-                <DropdownMenuItem>Ver detalles del producto</DropdownMenuItem>
+                <DropdownMenuItem disabled>
+                  Ver detalles del producto (proximamente)
+                </DropdownMenuItem>
               </DialogTrigger>
             </DropdownMenuContent>
           </DropdownMenu>
