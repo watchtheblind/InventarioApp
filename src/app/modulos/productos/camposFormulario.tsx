@@ -11,7 +11,7 @@ import {Input} from '@/components/ui/input'
 import {useFormContext} from 'react-hook-form'
 import type {FieldPath} from 'react-hook-form'
 import {z} from '@/components/zod-es.js'
-import {EsquemaProductos} from '@/app/hooks/productos/EsquemaProductos'
+import {EsquemaProductos} from '@/app/helpers/productos/EsquemaProductos'
 interface CampoFormularioProps {
   name: FieldPath<z.infer<typeof EsquemaProductos>>
   label: string
