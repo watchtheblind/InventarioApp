@@ -49,7 +49,7 @@ export const columnas: ColumnDef<Productos>[] = [
             console.log(productosSeleccionados)
           }, 0)
         }}
-        aria-label="Select all"
+        aria-label="Seleccionar todo"
       />
     ),
     cell: ({row, table}) => (
@@ -82,6 +82,9 @@ export const columnas: ColumnDef<Productos>[] = [
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
+    },
+    cell: ({getValue}: {getValue: () => any}) => {
+      return <div className="text-center">{getValue()}</div>
     },
   },
   {
