@@ -150,7 +150,9 @@ export default function Dashboard({children}: {children: React.ReactNode}) {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Ajustes</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href="./usuario">Ajustes</Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Salir</DropdownMenuItem>
             </DropdownMenuContent>

@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import {Checkbox} from '@/components/ui/checkbox'
 import {Input} from '@/components/ui/input'
 
 const PanelUsuario = () => {
@@ -26,7 +25,7 @@ const PanelUsuario = () => {
             <Link href="#" className="font-semibold text-primary">
               General
             </Link>
-            <Link href="#">Seguridad</Link>
+            {/* <Link href="#">Seguridad</Link> */}
           </nav>
           <div className="grid gap-6">
             <Card x-chunk="dashboard-04-chunk-1">
