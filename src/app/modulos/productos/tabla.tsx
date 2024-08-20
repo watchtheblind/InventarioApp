@@ -5,6 +5,7 @@ import {FileText, Sheet, Plus, Trash} from 'lucide-react'
 import {ModalCrearProducto} from './modalCrearProducto'
 import {crearExcel} from '@/app/helpers/excel/crearExcel'
 import {crearPDF} from '@/app/helpers/pdf/crearPdf'
+import {BorrarDatos} from '@/app/helpers/productos/borrarProductos'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -220,7 +221,9 @@ export function DataTable<TData, TValue>({
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                        <AlertDialogAction>Continuar</AlertDialogAction>
+                        <AlertDialogAction onClick={BorrarDatos}>
+                          Continuar
+                        </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
